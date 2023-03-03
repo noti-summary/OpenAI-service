@@ -1,12 +1,10 @@
-import express, { Request, Response } from 'express';
-import dotenv from 'dotenv';
+import express from 'express';
+import { config } from './config';
 import { summaryRouter } from './routes/summary';
-
-dotenv.config();
 
 const app = express();
 
-app.set("port", process.env.PORT || 5000);
+app.set("port", config.port);
 app.use(express.json());
 app.use("/api/summary", summaryRouter);
 
