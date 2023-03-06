@@ -6,7 +6,5 @@ services:
         container_name: openapi_container
         ports:
             - 5000:5000
-        volumes:
-            - .:/app
         env_file:
             - ./.env
