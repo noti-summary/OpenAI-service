@@ -3,8 +3,13 @@ version: "3.7"
 services:
     openai_server:
         build: .
-        container_name: openapi_container
+        container_name: openai_container
         ports:
             - 5000:5000
         env_file:
             - ./.env
+
+networks: 
+  default: 
+    external: 
+      name: backend_docker-network
