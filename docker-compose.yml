@@ -1,0 +1,12 @@
+version: "3.7"
+
+services:
+    openai_server:
+        build: .
+        container_name: openapi_container
+        ports:
+            - 5000:5000
+        volumes:
+            - .:/app
+        env_file:
+            - ./.env
