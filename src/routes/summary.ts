@@ -12,11 +12,14 @@ const openai = new OpenAIApi(configuration);
 
 summaryRouter.post('/', async(req: Request, res: Response): Promise<void> => {
     try{
+        const prompt: string = req.body.prompt;
+        const content: string = req.body.content;
+
         const completion = await openai.createChatCompletion({
             model: "gpt-3.5-turbo-0301",
             messages: [
-                {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": "How are you?"},
+                {"role": "system", "content": prompt},
+                {"role": "user", "content": content},
             ],
         });
         res.status(200).json(completion.data.choices[0].message?.content);
