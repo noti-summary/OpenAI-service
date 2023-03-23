@@ -7,7 +7,19 @@ on:
     paths-ignore:
       - 'README.md'
 
-jobs:   
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v3
+    - name: Run Jest
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+        cache: 'npm'
+    - run: npm ci
+    - run: npm run test-cover
+    
   deploy:
     runs-on: ubuntu-20.04
     steps:
