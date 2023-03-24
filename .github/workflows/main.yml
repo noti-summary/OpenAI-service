@@ -7,20 +7,24 @@ on:
     paths-ignore:
       - 'README.md'
 
+env:
+  PORT: ${{ secrets.PORT }}
+  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
 jobs:
-  build:
+  unit_test:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v3
-    - name: Run Jest
+    - name: Use Node.js 18
       uses: actions/setup-node@v3
       with:
         node-version: 18
         cache: 'npm'
-    - run: npm ci
-    - run: npm run test-cover
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
+    - name: Jest
+      run: |
+        npm ci
+        npm run test-cover
     
   deploy:
     runs-on: ubuntu-20.04

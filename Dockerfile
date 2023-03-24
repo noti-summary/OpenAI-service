@@ -19,8 +19,10 @@ COPY package*.json ./
 
 RUN npm ci --production
 
+RUN npm install pm2 -g
+
 COPY --from=builder /app/dist ./dist
 
 EXPOSE 5000
 
-CMD [ "npm", "start" ]
+CMD [ "npm", "run", "pm2" ]
