@@ -1,6 +1,16 @@
 version: "3.7"
 
 services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx_container
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - 80:80
+    depends_on:
+      - openai_server
+
   openai_server:
     build: .
     container_name: openai_container
@@ -8,8 +18,3 @@ services:
       - 5000:5000
     env_file:
       - ./.env
-
-networks: 
-  default: 
-    external: 
-      name: backend_docker-network
