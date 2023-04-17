@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
-    "pm2": "pm2-runtime start dist/index.js --name openai-service -i 2",
+    "pm2": "pm2-runtime start dist/index.js --name openai-service -i 4",
     "dev": "nodemon src/index.ts",
     "test": "jest",
     "test-cover": "jest --verbose --coverage"
