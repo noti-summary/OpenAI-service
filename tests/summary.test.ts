@@ -56,7 +56,7 @@ describe("POST /openai/summary/key", () => {
           .send({ prompt: "You are a helpful assistant.", content: "How are you?", key: "invalid-key" });
     
         expect(response.status).toBe(401);
-        expect(response.body.error.message).toEqual(expect.stringContaining("Incorrect API key provided"));
+        expect(response.body.error.code).toEqual(expect.stringContaining("invalid_api_key"));
     });
 
 });
