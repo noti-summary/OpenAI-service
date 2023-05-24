@@ -1,0 +1,22 @@
+name: Server Health Check
+on:
+  schedule:
+    - cron: "0 16 * * *"
+
+jobs:
+  health_check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Server Status
+        run: |
+          curl -sSf -X POST -H "Content-Type: application/json" --data '{
+              "prompt": "You are a helpful assistant.",
+              "content": "How are you?"
+          }' ${{ secrets.SERVER_URL }}
+          
+          if [[ $? -eq 0 ]]; then
+            echo "Server is active"
+          else
+            echo "Server is down"
+            exit 1
+          fi
