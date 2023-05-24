@@ -30,8 +30,10 @@ summaryRouter.post('/', async(req: Request, res: Response): Promise<void> => {
     }catch(error: any){
         if(error.response){
             res.status(error.response.status).json(error.response.data);
+            console.error(`${error.response.status}: ${JSON.stringify(error.response.data)}`);
         }else{
             res.status(500).json(error.message);
+            console.error(`500: ${JSON.stringify(error.response.data)}`);
         }
     }
 });
@@ -60,8 +62,10 @@ summaryRouter.post('/key', async(req: Request, res: Response): Promise<void> => 
     }catch(error: any){
         if(error.response){
             res.status(error.response.status).json(error.response.data);
+            console.error(`${error.response.status}: ${JSON.stringify(error.response.data)}`);
         }else{
             res.status(500).json(error.message);
+            console.error(`500: ${JSON.stringify(error.response.data)}`);
         }
     }
 });
