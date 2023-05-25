@@ -3,10 +3,10 @@ import { Configuration, OpenAIApi } from 'openai';
 import { config } from '../config';
 
 
-export const summaryRouter = Router();
+export const summarySegmentationRouter = Router();
 
-const MODEL: string = "gpt-3.5-turbo"
-const MAX_SEGMENT: number = 3000
+const MODEL: string = "gpt-3.5-turbo";
+const MAX_SEGMENT: number = 4000;
 
 const configuration = new Configuration({
     apiKey: config.openaiApiKey,
@@ -14,7 +14,7 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 
-summaryRouter.post('/', async (req: Request, res: Response): Promise<void> => {
+summarySegmentationRouter.post('/', async (req: Request, res: Response): Promise<void> => {
   try {
     const prompt: string = req.body.prompt;
     const content: string = req.body.content;
@@ -30,10 +30,22 @@ summaryRouter.post('/', async (req: Request, res: Response): Promise<void> => {
           { "role": "user", "content": segment },
         ],
       });
-      results.push(completion.data.choices[0].message?.content);
+      const segmentResult = completion.data.choices[0].message?.content as string;
+      results.push(segmentResult);
     }
 
-    const finalResult: string = results.join(''); // Concatenate the results
+    let finalResult: string;
+    if (results.length == 1) {
+      finalResult = results.join(' ');
+    } else {
+      const completion = await openai.createChatCompletion({
+        model: MODEL,
+        messages: [
+          { "role": "user", "content": results.join(' ') + "tl;dr"},
+        ],
+      });
+      finalResult = completion.data.choices[0].message?.content as string
+    }
 
     res.status(200).json(finalResult);
   } catch (error: any) {
@@ -47,7 +59,7 @@ summaryRouter.post('/', async (req: Request, res: Response): Promise<void> => {
   }
 });
 
-summaryRouter.post('/key', async(req: Request, res: Response): Promise<void> => {
+summarySegmentationRouter.post('/key', async(req: Request, res: Response): Promise<void> => {
     try{
         const prompt: string = req.body.prompt;
         const content: string = req.body.content;
@@ -69,10 +81,22 @@ summaryRouter.post('/key', async(req: Request, res: Response): Promise<void> => 
               { "role": "user", "content": segment },
             ],
           });
-          results.push(completion.data.choices[0].message?.content);
+          const segmentResult = completion.data.choices[0].message?.content as string;
+          results.push(segmentResult);
         }
 
-        const finalResult: string = results.join(''); // Concatenate the results
+        let finalResult: string;
+        if (results.length == 1) {
+          finalResult = results.join(' ');
+        } else {
+          const completion = await userOpenai.createChatCompletion({
+            model: MODEL,
+            messages: [
+              { "role": "user", "content": results.join(' ') + "tl;dr"},
+            ],
+          });
+          finalResult = completion.data.choices[0].message?.content as string
+        }
 
         res.status(200).json(finalResult);
       } catch (error: any) {
@@ -92,7 +116,7 @@ function segmentContent(content: string, size: number): string[] {
     
     let currentString: string = "";
     for (const line of lines) {
-      const newString = currentString + line;
+      const newString = currentString + "\n" + line;
       if (newString.length <= size) {
         currentString = newString;
       } else {
