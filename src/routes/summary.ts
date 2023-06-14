@@ -5,7 +5,7 @@ import { config } from '../config';
 
 export const summaryRouter = Router();
 
-const MODEL: string = "gpt-3.5-turbo"
+const MODEL: string = "gpt-3.5-turbo-16k"
 
 const configuration = new Configuration({
     apiKey: config.openaiApiKey,
