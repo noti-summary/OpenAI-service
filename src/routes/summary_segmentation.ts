@@ -5,8 +5,8 @@ import { config } from '../config';
 
 export const summarySegmentationRouter = Router();
 
-const MODEL: string = "gpt-4";
-const MAX_SEGMENT: number = 7500;
+const MODEL: string = "gpt-3.5-turbo-16k";
+const MAX_SEGMENT: number = 15000;
 
 const configuration = new Configuration({
     apiKey: config.openaiApiKey,
